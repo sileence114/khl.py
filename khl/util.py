@@ -2,7 +2,7 @@
 
 
 def unpack_id(obj):
-    """extract obj's id if not basic data type"""
+    """extract objet's id if not basic data type"""
     return obj if isinstance(obj, (str, int)) else obj.id
 
 

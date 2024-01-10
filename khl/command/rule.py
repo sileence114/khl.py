@@ -1,6 +1,6 @@
 from typing import Union, Callable, Coroutine, Any
 
-from khl import Message, User
+from khl import Message, PublicMessage, User
 
 TypeRule = Callable[[Message], Union[bool, Coroutine[Any, Any, bool]]]
 
@@ -13,7 +13,9 @@ class Rule:
         """:return: a Rule that checks if the bot is mentioned"""
 
         async def rule(msg: Message) -> bool:
-            return (await bot.fetch_me()).id in msg.extra.get('mention')
+            if not isinstance(msg, PublicMessage):
+                return False
+            return (await bot.fetch_me()).id in msg.mention
 
         return rule
 
@@ -22,14 +24,18 @@ class Rule:
         """:return: a Rule that checks if the user is mentioned"""
 
         def rule(msg: Message) -> bool:
-            return user.id in msg.extra.get('mention')
+            if not isinstance(msg, PublicMessage):
+                return False
+            return user.id in msg.mention
 
         return rule
 
     @staticmethod
     def is_mention_all(msg: Message) -> bool:
         """:return: a Rule that checks if the msg mentioned all members"""
-        return msg.extra.get('mention_all', None) is not None
+        if not isinstance(msg, PublicMessage):
+            return False
+        return msg.mention_all
 
     @staticmethod
     def is_not_bot(msg: Message) -> bool:

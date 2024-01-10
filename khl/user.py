@@ -13,7 +13,7 @@ class User(LazyLoadable, Requestable):
     """
     `Standard Object`
 
-    represent a entity that interact with khl server
+    represent an entity that interact with khl server
     """
     id: str
     username: str
@@ -54,7 +54,7 @@ class User(LazyLoadable, Requestable):
         """
         send a msg to a channel
 
-        ``temp_target_id`` is only available in ChannelPrivacyTypes.GROUP
+        ``temp_target_id`` is only available in `ChannelPrivacyTypes.GROUP`
         """
         # if content is card msg, then convert it to plain str
         if isinstance(content, List):

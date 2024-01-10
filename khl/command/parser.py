@@ -3,7 +3,7 @@ import asyncio
 import copy
 import inspect
 import logging
-from typing import Dict, Any, Callable, List, Union
+from typing import Dict, Any, Callable, List, Union, Type
 
 from khl import User, Channel, Client, Message, Role
 from .exception import Exceptions
@@ -54,7 +54,7 @@ class Parser:
     """
     deal with a list of tokens made from Lexer, convert their type to match the command.handler
     """
-    _parse_funcs: Dict[Any, Callable] = {
+    _parse_funcs: Dict[Type[Any], Callable[[Message, Client, str], Any]] = {
         str: lambda msg, client, token: token,
         int: lambda msg, client, token: int(token),
         float: lambda msg, client, token: float(token),

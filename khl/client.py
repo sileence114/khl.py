@@ -361,6 +361,14 @@ class Client(Requestable, AsyncRunnable):
         friends = (await self.gate.exec_req(api.friend(type='blocked')))['blocked']
         return [Friend(_gate_=self.gate, user_id=i['friend_info']['id'], **i) for i in friends]
 
+    async def fetch_message(self, msg_id: str):
+        req = api.Message.view(msg_id=msg_id)
+        return PublicMessage(_gate_=self.gate, **(await self.gate.exec_req(req)))
+
+    async def fetch_direct_message(self, chat_code: str, msg_id: str):
+        req = api.DirectMessage.view(chat_code=chat_code, msg_id=msg_id)
+        return PrivateMessage(code=chat_code, _gate_=self.gate, **(await self.gate.exec_req(req)))
+
     async def offline(self):
         """offline bot"""
         await self.gate.exec_req(api.User.offline())
